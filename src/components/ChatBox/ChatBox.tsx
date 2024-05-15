@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, Image } from '@nextui-org/react'
+import { Card, CardHeader, CardBody } from '@nextui-org/react'
 import { Handle, Position } from 'reactflow';
 import { MessageCircleMore } from 'lucide-react'
 import { WhatsApp } from '../../components/'
