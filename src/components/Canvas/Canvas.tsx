@@ -9,8 +9,9 @@ import ReactFlow, {
 import { useAtom } from 'jotai';
 import ChatBox from '../ChatBox/ChatBox'
 import { Sidebar } from '../../components'
-import { isEditAtom, messageContentAtom, nodeAtom, nodesAtom } from '../../store';
+import { isEditAtom,  nodeAtom, nodesAtom } from '../../store';
 import 'reactflow/dist/style.css';
+import { INode } from '../../interfaces';
 
 
 const nodeTypes = {
@@ -34,29 +35,31 @@ const Canvas = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [messageContent, setMessageContent] = useAtom(messageContentAtom)
   const [isEdit, setIsEdit] = useAtom(isEditAtom)
-  const [nodesArray, setNodesArray] = useAtom(nodesAtom)
-  const [node, setNode] = useAtom(nodeAtom)
+  const [, setNodesArray] = useAtom(nodesAtom)
+  const [, setNode] = useAtom(nodeAtom)
 
   const toggleEdit = () => setIsEdit(!isEdit)
-
-  const handleNodeClick = (event, node) => {
+  const handleNodeClick = (_event: any, node: INode) => {
     toggleEdit()
     setNode(node)
   };
 
   const onConnect = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     [],
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onDragOver = useCallback((event: any) => {
     event.preventDefault();
+
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
   const onDrop = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (event: any) => {
       event.preventDefault();
 
@@ -67,9 +70,7 @@ const Canvas = () => {
         return;
       }
 
-      // reactFlowInstance.project was renamed to reactFlowInstance.screenToFlowPosition
-      // and you don't need to subtract the reactFlowBounds.left/top anymore
-      // details: https://reactflow.dev/whats-new/2023-11-10
+      //@ts-expect-error next-line
       const position = reactFlowInstance?.screenToFlowPosition({
         x: event.clientX,
         y: event.clientY,
@@ -79,11 +80,11 @@ const Canvas = () => {
         id: getId(),
         type: "custom",
         position,
-        data: { header: 'Send Message', content: messageContent },
+        data: { header: 'Send Message', content: "Hi there, click me to edit." },
       };
 
       setNodes((nds) => ([...nds, newNode]));
-      //@ts-ignore next-line
+      //@ts-expect-error next-line
       setNodesArray(nodesArray => ([...nodesArray, newNode]))
 
     },
@@ -91,7 +92,7 @@ const Canvas = () => {
   );
 
   return (
-    <div className='flex'>
+    <div className='flex' >
       <ReactFlowProvider >
         <div className="w-[80vw] h-screen" ref={reactFlowWrapper}>
           <ReactFlow
@@ -105,8 +106,6 @@ const Canvas = () => {
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
-
-            // onClick={() => setIsEdit(false)}
             fitView
           >
             <Controls />

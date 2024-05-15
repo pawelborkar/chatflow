@@ -1,0 +1,5 @@
+export { default as AddNewChat } from "./AddNewChat/AddNewChat"
+export { default as Canvas } from "./Canvas/Canvas"
+export { default as ChatBox } from "./ChatBox/ChatBox"
+export { default as Settings } from "./Settings/Settings"
+export { default as Sidebar } from "./Sidebar/Sidebar"
