@@ -12,7 +12,7 @@ const Settings = () => {
   const [node, setNode] = useAtom(nodeAtom)
 
   const getMessageContent = () => {
-    const id = node.id
+    const id = node?.id
     const nodeDetials = totalNodes.filter((node: INode) => node.id === id)
     return nodeDetials[0]?.data.content
   }

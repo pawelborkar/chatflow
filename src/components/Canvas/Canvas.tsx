@@ -9,23 +9,15 @@ import ReactFlow, {
 import { useAtom } from 'jotai';
 import ChatBox from '../ChatBox/ChatBox'
 import { Sidebar } from '../../components'
-import { isEditAtom,  nodeAtom, nodesAtom } from '../../store';
+import { isEditAtom, nodeAtom, nodesAtom } from '../../store';
 import 'reactflow/dist/style.css';
 import { INode } from '../../interfaces';
+import { initialNodes } from '../../utils';
 
 
 const nodeTypes = {
   custom: ChatBox,
 };
-
-const initialNodes = [
-  {
-    id: '1',
-    type: 'custom',
-    data: { header: 'Send Message', content: "Hi there, Welcome" },
-    position: { x: 250, y: 5 },
-  },
-];
 
 let id = 2;
 const getId = () => `${id++}`;
@@ -40,6 +32,7 @@ const Canvas = () => {
   const [, setNode] = useAtom(nodeAtom)
 
   const toggleEdit = () => setIsEdit(!isEdit)
+
   const handleNodeClick = (_event: any, node: INode) => {
     toggleEdit()
     setNode(node)
@@ -99,10 +92,12 @@ const Canvas = () => {
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
+            //@ts-expect-error next-line
             onNodeClick={handleNodeClick}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             nodeTypes={nodeTypes}
+            //@ts-expect-error next-line
             onInit={setReactFlowInstance}
             onDrop={onDrop}
             onDragOver={onDragOver}
